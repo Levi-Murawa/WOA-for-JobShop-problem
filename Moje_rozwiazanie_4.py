@@ -193,24 +193,97 @@ def harmo_plot(harmo):
     fig.show()
 
 def otaczanie(a):
+    ##1
     return a
 
-def babelki(a):
-    return a
+def babelki(dane_pracy, roz_naj, l_m, naj_czas):
+    ##2
+    odp2 = []
+    dp = numpy.copy(dane_pracy)
+    dl = len(roz_naj)
+    rozw = pod_rozw(dp)
+    jak_dal_od_celu, ha = symulacja(dp, rozw, l_m)
+    poprawka = (dl*((jak_dal_od_celu - naj_czas)/(jak_dal_od_celu + naj_czas)))
+    poprawka = round(poprawka)
+    if(poprawka == 0):
+        poprawka = 2
+    elif(poprawka == 1):
+        poprawka = 2
+    gdzie_zaczac = random.randrange(0, dl - poprawka)
+    gdzie_skonczyc = gdzie_zaczac + poprawka
+    a = roz_naj[:gdzie_zaczac]
+    b = roz_naj[gdzie_zaczac:gdzie_skonczyc]
+    c = roz_naj[gdzie_skonczyc:]
+    #print(a, "b", b,"c", c)
+    random.shuffle(b)
 
-def szukanie():
-    return 0
+    if(not a):
+        if (not c):
+            odp = b
+        else:
+            odp = numpy.concatenate((b, c))
+    else:
+        if(not b):
+            odp = numpy.concatenate((a, b))
+        else:
+            odp = numpy.concatenate((a,b, c))
 
-def woa(l_iteracji, l_wielorybow, rozw, dane, l_maszyn):
-    wieloryb = []
-    czas, po, co = symulacja(dane, rozw, l_maszyn)
-    for a in range(l_wielorybow):
-        wieloryb.append((rozw, czas))
+    for i in range(dl):
+        odp2.append([odp[i][0], odp[i][1]])
+    return odp2
+
+def szukanie(a, roz_naj):
+    ##3
+    losowa = random.random()
+    odp2 = []
+    dl = len(roz_naj)
+    A = a*2*losowa
+    zmiana = dl*(A/4)
+    zmiana = round(zmiana)
+    if(zmiana<2):
+        zmiana = 2
+    if(((dl-zmiana)-1) <= 0):
+        gdzie_zaczac = 0
+    else:
+        gdzie_zaczac = random.randrange(0, (dl-zmiana)-1)
+    a = roz_naj[gdzie_zaczac:]
+    b = roz_naj[:gdzie_zaczac]
+    random.shuffle(a)
+
+    if (not b):
+        odp2 = a
+    else:
+        odp = numpy.concatenate((b, a))
+        for i in range(dl):
+            odp2.append([odp[i][0], odp[i][1]])
+
+
+    return odp2
+
+def woa(l_iteracji, rozw, dane, l_maszyn):
+    naj_rozw = rozw
+    naj_czas, naj_ha = symulacja(dane, rozw, l_maszyn)
 
     for i in range(l_iteracji):
-        numpy.random()
+        a = 2 * ((l_iteracji - i)/l_iteracji)
+        p = random.random()
+        if(p>0.5):
+            rozw_t = babelki(dane, naj_rozw, l_maszyn, naj_czas)
+            czas, ha = symulacja(dane, rozw_t, l_maszyn)
+            if(czas < naj_czas):
+                naj_czas = czas
+                naj_ha = ha
+            #print("bableki")
 
-    print("a")
+        else:
+            rozw_t = szukanie(a, naj_rozw)
+            czas, ha = symulacja(dane, rozw_t, l_maszyn)
+            if (czas < naj_czas):
+                naj_czas = czas
+                naj_ha = ha
+            ##print("szukanie")
+
+    return naj_czas, naj_ha
 
 
 jobs_data = [  # task = (machine_id, processing_time).
@@ -234,7 +307,7 @@ jobs_data3 = [  # task = (machine_id, processing_time).
     ]
 
 ###-----------------------------------------------MAIN
-zadanie = jobs_data2
+zadanie = jobs_data
 
 liczenie_maszyn = 1 + max(task[0] for job in zadanie for task in job)
 wszystkie_maszyny = range(liczenie_maszyn)
@@ -244,9 +317,19 @@ rozw = pod_rozw(zadanie)
 
 #a, b = symulacja(zadanie,rozw, liczenie_maszyn)
 a, b, c = whale(zadanie, rozw, liczenie_maszyn, 10)
-print(a)
-harmo_plot(b)
+
+woa(200,rozw,zadanie, liczenie_maszyn)
+
+#print(a)
+#harmo_plot(b)
+#print(rozw)
+#print(szukanie(0.34, rozw))
+#rozw2 = szukanie(0.34, rozw)
+#rozw2 = szukanie(0.32, rozw2)
+
 
 
 #print(whale(zadanie, rozw2, liczenie_maszyn, 1))
-#symulacja(zadanie,rozw2, liczenie_maszyn)
+#czas, ha = symulacja(zadanie,rozw2, liczenie_maszyn)
+
+#print(babelki(zadanie, rozw2, liczenie_maszyn, czas))
