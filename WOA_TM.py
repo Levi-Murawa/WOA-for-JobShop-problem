@@ -81,11 +81,10 @@ def symulacja(dane_pracy_org, rozwiazanie, L_maszyny):
                 while(wczesniej):
                     if(a != 0):
                         a = a - 1
-                        if (dane_pracy[x][a][1] == 0):
-                            1 == 1
-                        else:
+                        if (dane_pracy[x][a][1] != 0):
                             wczesniej = False
                             mozna = False
+
                     else:
                         mozna = True
                         wczesniej = False
@@ -141,19 +140,16 @@ def symulacja(dane_pracy_org, rozwiazanie, L_maszyny):
         hamuj = False
         for zadanie in dane_pracy:
             for etap in zadanie:
-                if(etap[1] == 0):
-                    1 == 1
-                else:
+                if(etap[1] != 0):
                     hamuj = True
+
+
         ### --------------------- Sprawdzanie wykonania zadania
 
 
 
 
     return czas, harmonogram
-
-
-
 
 
 def pod_rozw(dane_pracy):
@@ -258,7 +254,7 @@ def szukanie(a, roz_naj):
 
     return odp2
 
-def woa(l_iteracji, rozw, dane, l_maszyn):
+def woa(dane, rozw, l_maszyn, l_iteracji ):
     naj_rozw = rozw
     naj_czas, naj_ha = symulacja(dane, rozw, l_maszyn)
 
@@ -278,10 +274,11 @@ def woa(l_iteracji, rozw, dane, l_maszyn):
             czas, ha = symulacja(dane, rozw_t, l_maszyn)
             if (czas < naj_czas):
                 naj_czas = czas
+                naj_rozw = rozw_t
                 naj_ha = ha
             ##print("szukanie")
 
-    return naj_czas, naj_ha
+    return naj_czas,  naj_ha, naj_rozw
 
 jobs_data1 = [  # task = (machine_id, processing_time).
         [[0, 3]],  # Job0
