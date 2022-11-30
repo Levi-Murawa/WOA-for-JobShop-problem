@@ -1,6 +1,6 @@
 import WOA_TM
 import matplotlib.pyplot as plt
-import numpy as np
+
 
 if __name__ == '__main__':
     ##------------- podstawy korzystania z biblioteki
@@ -12,7 +12,7 @@ if __name__ == '__main__':
     print("Najmniejszy znaleziony czas:", min_czas)
     print("Wektor rozwiazania:", naj_roz)
     print("Rysowanie Diagramu Gantta ")
-    #WOA_TM.harmo_plot(naj_har)
+    WOA_TM.harmo_plot(naj_har)
 
     ##------------ Badanie skuteczności w zależności od ilości testów
     print('\n', "Badanie skuteczności w zależności od ilości testów:")
@@ -28,18 +28,20 @@ if __name__ == '__main__':
 
     ##------------ Badanie stabilności wyników dla różnych ilości przebiegów
     print('\n', "Badanie stabilności wyników dla różnych ilości przebiegów:")
+    przyklad3 = WOA_TM.jobs_data4
+    liczenie_maszyn = 1 + max(task[0] for job in przyklad3 for task in job)
+    rozw = WOA_TM.pod_rozw(przyklad3)
     wektor_z_czasami = []
     wektor_sredni = []
     zakres_badania = range(30)
     for i in zakres_badania:
-        wynik1 = WOA_TM.woa(przyklad2, rozw, liczenie_maszyn, i)
-        wynik2 = WOA_TM.woa(przyklad2, rozw, liczenie_maszyn, i)
-        wynik3 = WOA_TM.woa(przyklad2, rozw, liczenie_maszyn, i)
-        wynik4 = WOA_TM.woa(przyklad2, rozw, liczenie_maszyn, i)
+        wynik1 = WOA_TM.woa(przyklad3, rozw, liczenie_maszyn, i)
+        wynik2 = WOA_TM.woa(przyklad3, rozw, liczenie_maszyn, i)
+        wynik3 = WOA_TM.woa(przyklad3, rozw, liczenie_maszyn, i)
+        wynik4 = WOA_TM.woa(przyklad3, rozw, liczenie_maszyn, i)
         wynik_s = (wynik1[0]+wynik2[0]+wynik3[0]+wynik4[0])/4
         wektor_z_czasami.append([wynik1[0], wynik2[0], wynik3[0], wynik4[0]])
         wektor_sredni.append(wynik_s)
-    print(wektor_z_czasami)
 
     fig, ax = plt.subplots()
     ax.plot(zakres_badania, wektor_z_czasami, linewidth=2.0)
