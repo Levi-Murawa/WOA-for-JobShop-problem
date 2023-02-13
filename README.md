@@ -1,6 +1,7 @@
 # WOA-for-JobShop-problem
 Problem JobShop rozwiązany za pomocą algorytmu optymalizacji wieloryba.
 By uruchomić notatnik należy mieć zainstalowany język Python w wersji 3. Testowałem działanie dla wersji 3.9
+Realizacja zagadnienia harmonogramu przy pomocy optymalizacji wieloryba jest mało efektywna, prawodpodobnie wynika to z przygotowania tego algorytmu do działania w przedziale ciągłym a nie dyskretnym.
 
 # Dla Windowsa:
 Po pobraniu pliku wchodzimy w katalog WOA-for-JobShop-problem i wpisujmey "cmd" w pasek na górze
